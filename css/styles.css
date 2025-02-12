@@ -1,4 +1,10 @@
 /* Reset dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -8,15 +14,57 @@ body {
     text-align: center;
 }
 
+header {
+    position: relative;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 h1 {
     text-align: center;
 }
 
 /* Top Menu */
 .top-menu {
+    text-align: right;
     text-align: left;
-    padding: 10px 20px;
-    font-size: 12px;
+    padding: 10px 20px;    
+    font-family: Arial, sans-serif;
+}
+
+.top-menu a {
+    text-decoration:solid;
+    color: #000;
+    font-weight: bold;
+    margin-left: 15px;
+    padding: 10px 15px;
+    transition: 0.3s;
+}
+
+.top-menu a:hover {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.plus-icon {
+    cursor: pointer;
+}
+
+.menu-content {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 10px;
+    min-width: 120px;
 }
 
 /* Logo Container */
@@ -29,6 +77,7 @@ h1 {
     border: 2px solid black;
     max-width: 600px; /* Lebar kotak agar terlihat lebih proporsional */
     margin: 0 auto;
+    padding: 10px 0;
 }
 
 .logo-container h1 {
@@ -54,6 +103,21 @@ h1 {
 }
 
 /* Navigasi */
+
+nav {
+    display: flex;
+    justify-content: left; /* Menyesuaikan posisi ke kiri */
+    padding: 10px 0;
+}
+
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px; /* Memberikan jarak antar item */
+}
+
 nav ul {
     list-style: none;
     padding: 0;
@@ -72,6 +136,26 @@ nav ul li a {
     font-weight: bold;
     text-transform: uppercase;
     font-size: 14px;
+}
+
+.nav-menu li {
+    display: inline-block;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+.nav-menu a.active {
+    background-color: rgb(219, 219, 219);
+    color: white;
+    font-weight: bold;
 }
 
 /* Artikel */
@@ -166,6 +250,10 @@ footer {
     color: #fff;
     padding: 20px;
     text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
 
 footer .footer-content {
@@ -191,9 +279,15 @@ footer ul li a {
     font-size: 14px;
 }
 
-/* Search Icon */
-.search-icon svg {
-    width: 24px;
-    height: 24px;
-    stroke: black; /* Warna ikon agar terlihat */
+/* Pastikan body memiliki cukup tinggi agar footer tidak menutupi konten */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }

@@ -1,13 +1,9 @@
-<?php
-$host = 'localhost'; // Nama host
-$dbname = 'boooooom'; // Nama database
-$username = 'root'; // Username
-$password = ''; // Password (jika ada)
+<?php 
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
+    $conn = mysqli_connect("localhost", "root", "", "WebBlog");
+
+    if(mysqli_connect_errno()){
+        echo "Gagal koneksi ke database" . mysqli_connect_error();
+        exit();
+    }
 ?>

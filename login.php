@@ -6,31 +6,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare('SELECT * FROM authors WHERE username = ?');
+    // Mengambil data user berdasarkan username dari tabel 'users'
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE username = ?');
     $stmt->execute([$username]);
-    $author = $stmt->fetch();
+    $user = $stmt->fetch(); // Ambil data user
 
-    if ($author && password_verify($password, $author['password'])) {
-        $_SESSION['user_id'] = $author['id'];
-        $_SESSION['username'] = $author['username'];
+    // Cek jika user ada dan password cocok
+    if ($user && password_verify($password, $user['password'])) {
+        // Menyimpan informasi pengguna di session
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['username'] = $user['username'];
+
+        // Redirect ke halaman index.php setelah login berhasil
+        header('Location: index.php');
+        exit(); // Pastikan kode berikutnya tidak dijalankan
     } else {
-        $error = "Username atau password salah.";
+        // Menyimpan error untuk ditampilkan di form login
+        $_SESSION['error'] = "Username atau password salah.";
     }
 }
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="css/login.css">
+    <script>
+        // Menampilkan alert jika ada pesan error
+        window.onload = function() {
+            <?php if (isset($_SESSION['error'])) { ?>
+                alert("<?php echo $_SESSION['error']; ?>");
+                <?php unset($_SESSION['error']); // Hapus error setelah ditampilkan ?>
+            <?php } ?>
+        }
+    </script>
 </head>
+
 <body>
     <header>
         <a href="index.php" style="text-decoration: none; color: inherit;">
-        <div class="logo">BOOOOOOOM</div>
+            <div class="logo">BOOOOOOOM</div>
         </a>
         <nav>
             <a href="#">ART</a>
@@ -41,15 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="login-container">
         <h2>Log In</h2>
-        <form>
+        <form method="POST" action="login.php">
             <label for="email">Email Address</label>
-            <input type="email" id="email" required>
+            <input type="email" id="email" name="username" required>
 
             <label for="password">Password</label>
-            <input type="password" id="password" required>
+            <input type="password" id="password" name="password" required>
 
             <div class="actions black">
-                <a href="#" class="forgot-password">Forgot Password</a>
+                <a href="register.php" class="forgot-password">Don't Have an Account?</a>
                 <button type="submit">Log In</button>
             </div>
         </form>
@@ -63,7 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <a href="#">ADVERTISE!</a>
     </footer>
 </body>
+
 </html>
 
 
-
+</html>

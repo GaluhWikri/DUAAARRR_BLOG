@@ -31,23 +31,27 @@ h1 {
 /* Top Menu */
 .top-menu {
     text-align: right;
-    text-align: left;
     padding: 10px 20px;    
     font-family: Arial, sans-serif;
+    gap: 12px;
+    margin-bottom: 10px;
 }
 
 .top-menu a {
     text-decoration:solid;
     color: #000;
-    font-weight: bold;
     margin-left: 15px;
     padding: 10px 15px;
     transition: 0.3s;
+    font-size: 20px;
+    margin-left: 20px;
+
 }
 
 .top-menu a:hover {
-    background-color: #f0f0f0;
+    background-color: #272727;
     border-radius: 5px;
+    color: #ffffff;
 }
 
 .plus-icon {
@@ -74,9 +78,10 @@ h1 {
     align-items: center;
     position: relative;
     padding: 10px 20px;
-    border: 2px solid black;
-    max-width: 600px; /* Lebar kotak agar terlihat lebih proporsional */
-    margin: 0 auto;
+    border: 3px solid black; /* Lebarkan border */
+    width: 80%; /* Lebarkan kontainer agar memanjang */
+    max-width: none; /* Hilangkan pembatasan lebar */
+    margin: 1 auto;
     padding: 10px 0;
 }
 
@@ -93,6 +98,7 @@ h1 {
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-left: 20px;
 }
 
 .icons svg {
@@ -100,13 +106,13 @@ h1 {
     height: 24px;
     stroke: black;
     cursor: pointer;
+    margin-left: 20px;
 }
 
 /* Navigasi */
 
 nav {
-    display: flex;
-    justify-content: left; /* Menyesuaikan posisi ke kiri */
+    margin-top: 10px; /* Menyesuaikan posisi ke kiri */
     padding: 10px 0;
 }
 
@@ -116,6 +122,12 @@ nav {
     margin: 0;
     display: flex;
     gap: 15px; /* Memberikan jarak antar item */
+}
+
+.nav-menu a:hover{
+    background-color: #272727;
+    border-radius: 5px;
+    color: #ffffff;
 }
 
 nav ul {
@@ -162,7 +174,6 @@ nav ul li a {
 .articles-container {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
     gap: 20px;
     margin: 40px auto;
     width: 80%;
@@ -250,7 +261,7 @@ footer {
     color: #fff;
     padding: 20px;
     text-align: center;
-    position: fixed;
+    position:static;
     bottom: 0;
     left: 0;
     width: 100%;

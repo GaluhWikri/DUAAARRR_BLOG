@@ -1,28 +1,16 @@
-<?php
-session_start();
-
-// Periksa apakah 'id' ada di URL
-if (isset($_GET['id']) && isset($_SESSION['articles'][$_GET['id']])) {
-    // Ambil artikel berdasarkan ID yang dipilih
-    $article = $_SESSION['articles'][$_GET['id']];
-} else {
-    // Jika ID tidak ditemukan, arahkan ke halaman utama atau tampilkan pesan error
-    header('Location: index.php');
-    exit();
-}
-?>
 
 <?php include 'navbar.php'; ?>
 
 
-   
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .custom-prose p {
-            margin-bottom: 1.5em;
-        }
-    </style>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    .custom-prose p {
+        margin-bottom: 1.5em;
+    }
+</style>
 </head>
+
 <body class="bg-white" style="font-family: Arial, sans-serif; font-weight: bold;">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Grid untuk Gambar dan Teks -->
@@ -31,7 +19,7 @@ if (isset($_GET['id']) && isset($_SESSION['articles'][$_GET['id']])) {
             <div class="md:col-span-1.3">
                 <img src="img/2.jpg" alt="Mark Krespis Illustration" class="w-full h-auto rounded-lg">
             </div>
-            
+
             <!-- Judul, Tanggal, Penulis, dan Kategori -->
             <div class="md:col-span-2">
                 <h1 class="text-3xl font-bold text-gray-900 mb-4 text-left">Illustrator Spotlight: Mark Krespis</h1>
@@ -94,18 +82,18 @@ if (isset($_GET['id']) && isset($_SESSION['articles'][$_GET['id']])) {
     </div>
 </div>
 
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2025 BOOOOOOOM. All rights reserved.</p>
-            <ul>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-            </ul>
-        </div>
-    </footer>
+<footer>
+    <div class="footer-content">
+        <p>&copy; 2025 BOOOOOOOM. All rights reserved.</p>
+        <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+        </ul>
+    </div>
+</footer>
 
-    <script src="scripts.js"></script>
+<script src="scripts.js"></script>
 </body>
 
 </html>

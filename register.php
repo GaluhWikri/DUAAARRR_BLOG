@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
             // Simpan data pengguna baru
-            $stmt = $pdo->prepare('INSERT INTO users (email, password) VALUES (?, ?)');
-            $stmt->execute([$email, $passwordHash]);
+            $stmt = $pdo->prepare('INSERT INTO users (email, password, username, full_name) VALUES (?, ?, ?, ?)');
+            $stmt->execute([$email, $passwordHash, $_POST['username'], $_POST['full_name']]);
 
             // Redirect ke halaman login setelah berhasil
             header('Location: login.php');

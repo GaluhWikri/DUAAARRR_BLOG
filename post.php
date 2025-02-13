@@ -20,6 +20,36 @@ if (isset($_GET['id'])) {
     $article = $stmt->fetch();
 }
 ?>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['comment'])) {
+    $name = $_POST['name'];
+    $comment = $_POST['comment'];
+    
+    // Menyimpan komentar baru ke dalam database
+    $insert_query = "INSERT INTO comments (article_id, name, comment) VALUES (:article_id, :name, :comment)";
+    $stmt = $pdo->prepare($insert_query);
+    $stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':comment', $comment, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Redirect kembali ke halaman artikel untuk melihat komentar yang baru saja ditambahkan
+    header("Location: post.php?id=$article_id");
+    exit();
+}
+?>
+
+
+<?php
+// Ambil komentar yang terkait dengan artikel berdasarkan article_id
+$comments_query = "SELECT * FROM comments WHERE article_id = :article_id ORDER BY created_at DESC";
+$comments_stmt = $pdo->prepare($comments_query);
+$comments_stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+$comments_stmt->execute();
+$comments = $comments_stmt->fetchAll();
+?>
+
 <?php include 'navbar.php'; ?>
 
 
@@ -79,36 +109,28 @@ if (isset($_GET['id'])) {
 
 <!-- List of Comments -->
 <div id="commentsList" class="space-y-6">
-    <!-- Example Comment (You can dynamically generate these with JavaScript) -->
-    <div class="bg-gray-50 p-4 rounded-lg text-center">
-        <div class="flex flex-col items-center mb-2">
-            <span class="font-bold text-gray-900">John Doe</span>
-            <span class="text-sm text-gray-500">• February 14, 2025 at 10:30</span>
+    <?php foreach ($comments as $comment): ?>
+        <div class="bg-gray-50 p-4 rounded-lg text-center">
+            <div class="flex flex-col items-center mb-2">
+                <span class="font-bold text-gray-900"><?= htmlspecialchars($comment['name']); ?></span>
+                <span class="text-sm text-gray-500">• <?= date('F j, Y \a\t g:i A', strtotime($comment['created_at'])); ?></span>
+            </div>
+            <p class="text-gray-700"><?= nl2br(htmlspecialchars($comment['comment'])); ?></p>
         </div>
-        <p class="text-gray-700">This is an example comment. Mark Krespis's work is truly inspiring!</p>
-    </div>
-
-    <!-- Another Example Comment -->
-    <div class="bg-gray-50 p-4 rounded-lg text-center">
-        <div class="flex flex-col items-center mb-2">
-            <span class="font-bold text-gray-900">Jane Smith</span>
-            <span class="text-sm text-gray-500">• February 15, 2025 at 08:15</span>
-        </div>
-        <p class="text-gray-700">I love how he blends fine art and lowbrow illustration. Great article!</p>
-    </div>
+    <?php endforeach; ?>
 </div>
 
 
 
 <!-- Section for User Comments -->
 <div class="mt-12">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Leave a Comment</h2>
 
     <!-- Form to Add a Comment -->
     <div class="mb-8">
-        <form id="commentForm">
+        <form action="post.php?id=<?= $article_id ?>" method="POST" id="commentForm">
             <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
                 <input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required>
             </div>
             <div class="mb-4">
@@ -118,6 +140,8 @@ if (isset($_GET['id'])) {
             <button type="submit" class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">Submit Comment</button>
         </form>
     </div>
+</div>
+
 
 
 <footer>

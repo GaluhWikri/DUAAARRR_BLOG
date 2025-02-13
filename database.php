@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';  // Sesuaikan dengan host Anda
-$dbname = 'article_db'; // Sesuaikan dengan nama database
+$dbname = 'kpl'; // Sesuaikan dengan nama database
 $username = 'root'; // Sesuaikan dengan username database
 $password = ''; // Sesuaikan dengan password database (kosongkan jika default)
 

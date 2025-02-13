@@ -36,11 +36,24 @@ if ($is_logged_in) {
             <a href="register.php" style="font-size: 20px;">REGISTER</a>
         <?php else: ?>
             <!-- Jika sudah login, tampilkan menu atau tulisan lain yang diinginkan -->
-            <a href="logout.php" style="font-size: 20px;">LOGOUT</a>
+            <a href="javascript:void(0);" onclick="confirmLogout()" style="font-size: 20px;">LOGOUT</a>
         <?php endif; ?>
     </div>
 
-    <div class="logo-container">
+    <script>
+        function confirmLogout() {
+            // Menampilkan konfirmasi logout
+            var result = confirm("Apakah Anda yakin ingin logout?");
+
+            if (result) {
+                // Jika pengguna klik OK, redirect ke logout.php
+                window.location.href = "admin/logout.php";
+            }
+            // Jika pengguna klik Cancel, tidak ada tindakan lebih lanjut
+        }
+    </script>
+
+<div class="logo-container">
     <div class="logo" style="margin-left: 15px;">
         <a href="index.php">
             <h1 id="logo-title" onclick="toggleSearchBox()">DUAAARRR</h1>
@@ -55,16 +68,39 @@ if ($is_logged_in) {
         </span>
         <span class="plus-icon" style="margin-right: 15px;">
             <!-- Add SVG icon for menu -->
-            <a href="<?php echo $icon_link; ?>" class="<?php echo $icon_class; ?>"
-                <?php echo !$is_logged_in ? 'onclick="alert(\'' . $notification . '\'); return false;"' : ''; ?>>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-            </a>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <!-- Jika sudah login, tampilkan link yang sesuai -->
+                <a href="dashboard.php">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </a>
+            <?php else: ?>
+                <!-- Jika belum login, tampilkan alert dan arahkan ke login -->
+                <a href="javascript:void(0);" onclick="checkLogin()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </a>
+            <?php endif; ?>
         </span>
     </div>
 </div>
-<script src="js/navbar.js"></script>
+
+<script>
+    // Function to check if the user is logged in
+    function checkLogin() {
+        <?php if (!isset($_SESSION['user_id'])): ?>
+            // If user is not logged in, show an alert and redirect to login page
+            alert("You must be logged in to access this feature.");
+            window.location.href = "login.php";  // Redirect to login.php
+        <?php else: ?>
+            // If user is logged in, proceed with the intended action
+            // You can add the action here for the logged-in users
+        <?php endif; ?>
+    }
+</script>
+    <script src="js/navbar.js"></script>
 
 
     </div>

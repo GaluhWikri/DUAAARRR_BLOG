@@ -3,29 +3,29 @@ session_start();
 require 'database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Mengambil data user berdasarkan username dari tabel 'users'
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE username = ?');
-    $stmt->execute([$username]);
+    // Mengambil data user berdasarkan email dari tabel 'users'
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
+    $stmt->execute([$email]);
     $user = $stmt->fetch(); // Ambil data user
 
     // Cek jika user ada dan password cocok
     if ($user && password_verify($password, $user['password'])) {
         // Menyimpan informasi pengguna di session
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
+        $_SESSION['username'] = $user['username']; // Username tetap digunakan setelah login
 
         // Redirect ke halaman index.php setelah login berhasil
         header('Location: index.php');
-        exit(); // Pastikan kode berikutnya tidak dijalankan
+        exit();
     } else {
         // Menyimpan error untuk ditampilkan di form login
-        $_SESSION['error'] = "Username atau password salah.";
+        $_SESSION['error'] = "Email atau password salah.";
     }
 }
-?>
+    ?>
 
 
 
@@ -42,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         window.onload = function() {
             <?php if (isset($_SESSION['error'])) { ?>
                 alert("<?php echo $_SESSION['error']; ?>");
-                <?php unset($_SESSION['error']); // Hapus error setelah ditampilkan ?>
+                <?php unset($_SESSION['error']); // Hapus error setelah ditampilkan 
+                ?>
             <?php } ?>
         }
     </script>
@@ -64,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2>Log In</h2>
         <form method="POST" action="login.php">
             <label for="email">Email Address</label>
-            <input type="email" id="email" name="username" required>
+            <input type="email" id="email" name="email" required>
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
@@ -87,5 +88,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </html>
 
-
-</html>

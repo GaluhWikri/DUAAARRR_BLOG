@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $update_stmt->bind_param("ssssssi", $gambar, $judul, $penulis, $isi, $kategori, $updated_at, $id);
 
     if ($update_stmt->execute()) {
-        header('Location: /Keamanan%20Perangkat%20Lunak/daftar_artikel.php');
+        header('Location: /DUAAARRR_BLOG/daftar_artikel.php');
         exit();
     } else {
         echo "Error: " . $update_stmt->error;

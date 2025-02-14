@@ -6,6 +6,6 @@ session_unset(); // Menghapus semua variabel sesi
 session_destroy(); // Menghancurkan sesi
 
 // Redirect ke halaman login setelah logout
-header('Location: /Keamanan%20Perangkat%20Lunak/index.php');
+header('Location: /DUAAARRR_BLOG/index.php');
 exit();
 ?>

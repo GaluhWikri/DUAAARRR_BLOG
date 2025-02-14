@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$judul, $gambar_data, $tanggal, $penulis, $kategori, $isi]);
 
     // Redirect ke halaman daftar artikel
-    header('Location: /Keamanan%20Perangkat%20Lunak/daftar_artikel.php');
+    header('Location: /DUAAARRR_BLOG/daftar_artikel.php');
     exit;
 }
 ?>

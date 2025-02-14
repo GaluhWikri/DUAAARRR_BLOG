@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <header>
         <a href="index.php" style="text-decoration: none; color: inherit;">
-            <div class="logo">BOOOOOOOM</div>
+            <div class="logo">DUAAARRR</div>
         </a>
         <nav>
             <a href="#">ART</a>

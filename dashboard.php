@@ -14,7 +14,7 @@ require_once 'database.php';
     <link rel="stylesheet" href="css/login.css">
     <header>
         <a href="index.php" style="text-decoration: none; color: inherit;">
-            <div class="logo">BOOOOOOOM</div>
+            <div class="logo">DUAAARRR</div>
         </a>
         <nav>
             <a href="daftar_artikel.php">LIST ARTICLES</a>

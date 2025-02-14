@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['error'] = "Email atau password salah.";
     }
 }
-    ?>
+?>
 
 
 
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <header>
         <a href="index.php" style="text-decoration: none; color: inherit;">
-            <div class="logo">BOOOOOOOM</div>
+            <div class="logo">DUAAARRR</div>
         </a>
         <nav>
             <a href="#">ART</a>
@@ -78,13 +78,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <footer>
-        <a href="#">ABOUT</a>
-        <a href="#">PRIVACY POLICY</a>
-        <a href="#">TERMS & CONDITIONS</a>
-        <a href="#">CONTACT</a>
-        <a href="#">ADVERTISE!</a>
+        <div class="footer-content">
+            <p>&copy; 2025 DUAAARRR. All rights reserved.</p>
+            <ul>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+            </ul>
+        </div>
     </footer>
 </body>
 
 </html>
-

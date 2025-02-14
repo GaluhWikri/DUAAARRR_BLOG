@@ -25,11 +25,10 @@ if (isset($_POST['id'])) {
         // Commit transaksi jika semuanya berhasil
         $conn->commit();
 
-        header('Location: /DUAAARRR_BLOG/daftar_artikel.php');
+        header('Location: /DUAAARRR_BLOG-MAIN/index.php');
     } catch (Exception $e) {
         // Rollback jika ada error
         $conn->rollback();
         echo "Error: " . $e->getMessage();
     }
 }
-?>

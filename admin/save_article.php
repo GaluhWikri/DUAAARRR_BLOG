@@ -7,6 +7,7 @@ date_default_timezone_set('Asia/Jakarta');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form
+    $penulis_id = $_SESSION['user_id'];
     $judul = $_POST['judul'];
     $penulis = $_POST['penulis'];
     $kategori = $_POST['kategori'];
@@ -20,18 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         die("Gagal mengupload gambar.");
     }
-    
     // Validasi ukuran gambar (maksimal 2MB)
     if ($_FILES['gambar']['size'] > 2 * 1024 * 1024) { // 2MB
         die("Ukuran gambar terlalu besar. Maksimal 2MB.");
     }
 
     // Simpan data ke database
-    $stmt = $pdo->prepare("INSERT INTO articles (judul, gambar, tanggal, penulis, kategori, isi) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$judul, $gambar_data, $tanggal, $penulis, $kategori, $isi]);
+    $stmt = $pdo->prepare("INSERT INTO articles (judul, gambar, tanggal, penulis, kategori, isi, penulis_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$judul, $gambar_data, $tanggal, $penulis, $kategori, $isi, $penulis_id]);
 
     // Redirect ke halaman daftar artikel
-    header('Location: /DUAAARRR_BLOG/daftar_artikel.php');
+    header('Location: /DUAAARRR_BLOG-MAIN/index.php');
     exit;
 }
-?>

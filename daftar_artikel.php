@@ -68,16 +68,15 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Judul Gambar</h4>
                                         <div class="flex justify-between items-center mt-2">
                                             <span class="text-sm text-black dark:text-gray-900">
-                                                <?= date("d F Y", strtotime($article['updated_at'] ?? $article['tanggal'])); ?>
-                                            </span>
-                                            <span class="text-sm text-black dark:text-gray-900">
+                                                <?= date("d F Y", strtotime($article['updated_at'] ?? $article['tanggal'])); ?>&nbsp;
                                                 <?= date("H:i A", strtotime($article['updated_at'] ?? $article['tanggal'])); ?>
                                             </span>
                                         </div>
                                         <div class="mt-2">
-                                            <span class="text-sm text-black dark:text-gray-900">Kategori: <?= htmlspecialchars($article['kategori']); ?></span>
+                                            <span class="text-sm text-black dark:text-gray-900">Kategori : <?= htmlspecialchars($article['kategori']); ?></span>
                                         </div>
                                     </div>
+
 
                                     <!-- Tombol Edit dan Hapus -->
                                     <div class="mt-4 flex space-x-4">

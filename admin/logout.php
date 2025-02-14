@@ -6,5 +6,5 @@ session_unset(); // Menghapus semua variabel sesi
 session_destroy(); // Menghancurkan sesi
 
 // Redirect ke halaman login setelah logout
-header('Location: /DUAAARRR_BLOG-MAIN/index.php');
+header('Location: /DUAAARRR_BLOG/index.php');
 exit();

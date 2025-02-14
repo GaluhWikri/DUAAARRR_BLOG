@@ -31,6 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$judul, $gambar_data, $tanggal, $penulis, $kategori, $isi, $penulis_id]);
 
     // Redirect ke halaman daftar artikel
-    header('Location: /DUAAARRR_BLOG-MAIN/index.php');
+    header('Location: /DUAAARRR_BLOG/index.php');
     exit;
 }

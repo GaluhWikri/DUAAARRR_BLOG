@@ -25,7 +25,7 @@ if (isset($_POST['id'])) {
         // Commit transaksi jika semuanya berhasil
         $conn->commit();
 
-        header('Location: /DUAAARRR_BLOG-MAIN/index.php');
+        header('Location: /DUAAARRR_BLOG/index.php');
     } catch (Exception $e) {
         // Rollback jika ada error
         $conn->rollback();

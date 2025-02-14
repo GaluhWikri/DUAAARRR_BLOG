@@ -77,9 +77,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Kategori -->
     <div class="mb-4">
-        <label for="kategori" class="block text-sm font-medium text-gray-700">Kategori</label>
-        <input type="text" id="kategori" name="kategori" value="<?= htmlspecialchars($article['kategori']); ?>" required
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm">
+            <label for="kategori" value="<?= htmlspecialchars($article['kategori']); ?> class="block text-sm font-medium text-gray-700">Kategori</label>
+                <select id="kategori" name="kategori" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required>
+                    <option value="Art">Art</option>
+                    <option value="Design">Design</option>
+                    <option value="Illustration">Illustration</option>
+                    <option value="Photography">Photography</option>
+                </select>
     </div>
 
     <!-- Tombol Submit -->

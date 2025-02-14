@@ -45,7 +45,7 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </a>
                     <div class="p-5">
                         <!-- Tampilkan judul dan penulis -->
-                        <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-black">
                             <a href="#"><?= htmlspecialchars($article['judul']); ?></a>
                         </h3>
                         <span class="text-black dark:text-gray-900"><?= htmlspecialchars($article['penulis']); ?></span>

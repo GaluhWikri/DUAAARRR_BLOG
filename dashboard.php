@@ -40,12 +40,6 @@ require_once 'database.php';
                 <p class="text-sm text-gray-500 mt-1">Ukuran maksimal gambar: 2MB.</p>
             </div>
 
-            <!-- Tanggal Publikasi -->
-            <div class="mb-4">
-                <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal Publikasi</label>
-                <input type="date" id="tanggal" name="tanggal" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required>
-            </div>
-
             <!-- Penulis -->
             <div class="mb-4">
                 <label for="penulis" class="block text-sm font-medium text-gray-700">Penulis</label>

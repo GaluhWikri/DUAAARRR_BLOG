@@ -19,32 +19,36 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </nav>
 
 <body>
-    <main>
-        <div class="articles-container flex flex-wrap justify-center gap-4">
-            <?php
-            if ($articles) {
-                foreach ($articles as $article) {
-                    ?>
-                    <div class="article p-4 opacity-100 scale-100 transition-opacity transition-transform duration-300 ease-in-out" data-category="<?= strtolower($article['kategori']); ?>">
-                        <div class="overlay"></div>
-                        <a href="post.php?id=<?= $article['id']; ?>">
-                            <img src="data:image/jpeg;base64,<?= base64_encode($article['gambar']); ?>" alt="<?= htmlspecialchars($article['judul']); ?>" class="w-full h-auto">
-                            <h2 class="mt-2"><?= htmlspecialchars($article['judul']); ?></h2>
-                            <p class="text-sm">
-                                <time datetime="<?= date('c', strtotime($article['tanggal'])); ?>"><?= date('d.m.y – H:i', strtotime($article['tanggal'])); ?></time>
-                                – <span><?= htmlspecialchars($article['penulis']); ?></span>
-                                – <span class="category"><?= htmlspecialchars($article['kategori']); ?></span>
-                            </p>
-                        </a>
-                    </div>
-                    <?php
-                }
-            } else {
-                echo "Tidak ada artikel ditemukan.";
+<main>
+    <div class="articles-container flex flex-wrap justify-center gap-4">
+        <?php
+        if ($articles) {
+            foreach ($articles as $article) {
+                $tanggal_terbaru = $article['updated_at'] ?? $article['tanggal']; // Gunakan updated_at jika ada
+                ?>
+                <div class="article p-4 opacity-100 scale-100 transition-opacity transition-transform duration-300 ease-in-out" data-category="<?= strtolower($article['kategori']); ?>">
+                    <div class="overlay"></div>
+                    <a href="post.php?id=<?= $article['id']; ?>">
+                        <img src="data:image/jpeg;base64,<?= base64_encode($article['gambar']); ?>" alt="<?= htmlspecialchars($article['judul']); ?>" class="w-full h-auto">
+                        <h2 class="mt-2"><?= htmlspecialchars($article['judul']); ?></h2>
+                        <p class="text-sm">
+                            <time datetime="<?= date('c', strtotime($tanggal_terbaru)); ?>">
+                                <?= date('d.m.y – H:i', strtotime($tanggal_terbaru)); ?>
+                            </time>
+                            – <span><?= htmlspecialchars($article['penulis']); ?></span>
+                            – <span class="category"><?= htmlspecialchars($article['kategori']); ?></span>
+                        </p>
+                    </a>
+                </div>
+                <?php
             }
-            ?>
-        </div>
-    </main>
+        } else {
+            echo "Tidak ada artikel ditemukan.";
+        }
+        ?>
+    </div>
+</main>
+
     <script src="js/main.js"></script>
     
     <style>

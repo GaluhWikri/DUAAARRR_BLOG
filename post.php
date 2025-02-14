@@ -25,7 +25,7 @@ if (isset($_GET['id'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['comment'])) {
     $name = $_POST['name'];
     $comment = $_POST['comment'];
-    
+
     // Menyimpan komentar baru ke dalam database
     $insert_query = "INSERT INTO comments (article_id, name, comment) VALUES (:article_id, :name, :comment)";
     $stmt = $pdo->prepare($insert_query);
@@ -61,6 +61,7 @@ $comments = $comments_stmt->fetchAll();
     }
 </style>
 </head>
+
 <body class="bg-white" style="font-family: Arial, sans-serif; font-weight: bold;">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <?php if ($article): ?>
@@ -80,7 +81,11 @@ $comments = $comments_stmt->fetchAll();
                 <div class="md:col-span-2">
                     <h1 class="text-3xl font-bold text-gray-900 mb-4 text-left"><?= htmlspecialchars($article['judul']) ?></h1>
                     <p class="text-sm font-bold text-gray-500 mb-2 text-left">
-                        Published on <?= date('F j, Y \a\t H:i', strtotime($article['tanggal'])) ?>
+                        <?php
+                        // Jika ada updated_at, tampilkan waktu pembaruan, jika tidak, tampilkan waktu pembuatan
+                        $published_date = $article['updated_at'] ? $article['updated_at'] : $article['tanggal'];
+                        echo "Published on " . date('F j, Y \a\t H:i', strtotime($published_date));
+                        ?>
                     </p>
                     <p class="text-sm font-bold text-gray-500 mb-4 text-left">
                         By <?= htmlspecialchars($article['penulis']) ?>

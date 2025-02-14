@@ -1,9 +1,19 @@
 <?php
 
+session_start();
+
 require_once 'database.php';
 
+$admin_ids = [14, 10];
+$user_id = $_SESSION['user_id'];
+$query = "";
+if (in_array($user_id, $admin_ids)) {
+    $query = "SELECT * FROM articles";
+} else {
+    $query = "SELECT * FROM articles where penulis_id=" . $user_id;
+}
 // Ambil data artikel dari database
-$stmt = $pdo->query("SELECT * FROM articles");
+$stmt = $pdo->query($query);
 $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $update_stmt->bind_param("ssssssi", $gambar, $judul, $penulis, $isi, $kategori, $updated_at, $id);
 
     if ($update_stmt->execute()) {
-        header('Location: /Keamanan%20Perangkat%20Lunak/daftar_artikel.php');
+        header('Location: /DUAAARRR_BLOG-MAIN/index.php');
         exit();
     } else {
         echo "Error: " . $update_stmt->error;
@@ -97,11 +97,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p class="text-sm text-gray-500">
         Terakhir diperbarui: <?= $article['updated_at'] ? date('d M Y, H:i', strtotime($article['updated_at'])) : date('d M Y, H:i', strtotime($article['tanggal'])); ?>
     </p>
-    
-    <!-- Tombol Submit -->
-    <div class="flex justify-end">
-        <button type="submit" class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-            Simpan Perubahan
-        </button>
-    </div>
+    <<<<<<< HEAD=======>>>>>>> origin/rancagp
+        <!-- Tombol Submit -->
+        <div class="flex justify-end">
+            <button type="submit" class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
+                Simpan Perubahan
+            </button>
+        </div>
 </form>

@@ -1,71 +1,46 @@
-<?php
-session_start();
-include_once("database.php");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <?php include 'navbar.php'; ?>
 
-// Ambil data artikel dari database
-$stmt = $pdo->query("SELECT * FROM articles");
-$articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<?php include 'navbar.php'; ?>
-<nav class="flex justify-center mb-4">
-    <ul class="nav-menu flex space-x-8">
-        <li><a href="#" class="filter-btn text-center text-gray-800 hover:text-blue-500 hover:scale-110 transition-all duration-300" data-filter="all">All</a></li>
-        <li><a href="#" class="filter-btn text-center text-gray-800 hover:text-blue-500 hover:scale-110 transition-all duration-300" data-filter="design">DESIGN</a></li>
-        <li><a href="#" class="filter-btn text-center text-gray-800 hover:text-blue-500 hover:scale-110 transition-all duration-300" data-filter="art">ART</a></li>
-        <li><a href="#" class="filter-btn text-center text-gray-800 hover:text-blue-500 hover:scale-110 transition-all duration-300" data-filter="photography">PHOTOGRAPHY</a></li>
-        <li><a href="#" class="filter-btn text-center text-gray-800 hover:text-blue-500 hover:scale-110 transition-all duration-300" data-filter="illustration">ILLUSTRATION</a></li>
-    </ul>
-</nav>
-
-<body>
-<main>
-    <div class="articles-container flex flex-wrap justify-center gap-4">
-        <?php
-        if ($articles) {
-            foreach ($articles as $article) {
-                $tanggal_terbaru = $article['updated_at'] ?? $article['tanggal']; // Gunakan updated_at jika ada
-                ?>
-                <div class="article p-4 opacity-100 scale-100 transition-opacity transition-transform duration-300 ease-in-out" data-category="<?= strtolower($article['kategori']); ?>">
-                    <div class="overlay"></div>
-                    <a href="post.php?id=<?= $article['id']; ?>">
-                        <img src="data:image/jpeg;base64,<?= base64_encode($article['gambar']); ?>" alt="<?= htmlspecialchars($article['judul']); ?>" class="w-full h-auto">
-                        <h2 class="mt-2"><?= htmlspecialchars($article['judul']); ?></h2>
-                        <p class="text-sm">
-                            <time datetime="<?= date('c', strtotime($tanggal_terbaru)); ?>">
-                                <?= date('d.m.y – H:i', strtotime($tanggal_terbaru)); ?>
-                            </time>
-                            – <span><?= htmlspecialchars($article['penulis']); ?></span>
-                            – <span class="category"><?= htmlspecialchars($article['kategori']); ?></span>
-                        </p>
+    <main class="max-w-6xl mx-auto py-12 px-4">
+        <h1 class="text-4xl font-bold text-gray-800 text-center mb-8">Latest Articles</h1>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <?php for($i = 1; $i <= 4; $i++): ?>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition">
+                    <a href="post.php?id=<?php echo $i; ?>" class="block">
+                        <img src="img/2.jpg" alt="Article <?php echo $i; ?>" class="w-full h-56 object-cover">
+                        <div class="p-4">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">Article <?php echo $i; ?> Title</h2>
+                            <p class="text-gray-600 text-sm mb-2">
+                                <time datetime="2025-02-12T14:30:00">12.02.25 – 14:30</time>
+                                – <span class="font-semibold">John Doe</span>
+                                – <span class="text-blue-500">Tech</span>
+                            </p>
+                            <p class="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                            <button class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500">Read More</button>
+                        </div>
                     </a>
                 </div>
-                <?php
-            }
-        } else {
-            echo "Tidak ada artikel ditemukan.";
-        }
-        ?>
-    </div>
-</main>
+            <?php endfor; ?>
+        </div>
+    </main>
 
-    <script src="js/main.js"></script>
-    
-    <style>
-        .article {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-    </style>
-
-<footer>
-    <div class="footer-content">
-        <p>&copy; 2025 DUAAARRR. All rights reserved.</p>
-        <ul>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-        </ul>
-    </div>
-</footer>
+    <footer class="bg-gray-900 text-white py-6 mt-12">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center px-4">
+            <p class="text-gray-400">&copy; 2025 BOOOOOOOM. All rights reserved.</p>
+            <ul class="flex space-x-4 mt-2 md:mt-0">
+                <li><a href="#" class="hover:text-gray-300">About</a></li>
+                <li><a href="#" class="hover:text-gray-300">Contact</a></li>
+                <li><a href="#" class="hover:text-gray-300">Privacy Policy</a></li>
+            </ul>
+        </div>
+    </footer>
 </body>
-
+</html>

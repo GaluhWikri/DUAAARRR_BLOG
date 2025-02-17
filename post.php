@@ -1,54 +1,3 @@
-<?php
-session_start();
-include_once("database.php");
-
-// Ambil data artikel dari database
-$stmt = $pdo->query("SELECT * FROM articles");
-$articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<?php
-// Pastikan ada id di URL
-if (isset($_GET['id'])) {
-    $article_id = $_GET['id'];
-
-    // Query untuk mengambil artikel berdasarkan id
-    $query = "SELECT * FROM articles WHERE id = :id";
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':id', $article_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $article = $stmt->fetch();
-}
-?>
-
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['comment'])) {
-    $name = $_POST['name'];
-    $comment = $_POST['comment'];
-
-    // Menyimpan komentar baru ke dalam database
-    $insert_query = "INSERT INTO comments (article_id, name, comment) VALUES (:article_id, :name, :comment)";
-    $stmt = $pdo->prepare($insert_query);
-    $stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
-    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-    $stmt->bindParam(':comment', $comment, PDO::PARAM_STR);
-    $stmt->execute();
-
-    // Redirect kembali ke halaman artikel untuk melihat komentar yang baru saja ditambahkan
-    header("Location: post.php?id=$article_id");
-    exit();
-}
-?>
-
-
-<?php
-// Ambil komentar yang terkait dengan artikel berdasarkan article_id
-$comments_query = "SELECT * FROM comments WHERE article_id = :article_id ORDER BY created_at DESC";
-$comments_stmt = $pdo->prepare($comments_query);
-$comments_stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
-$comments_stmt->execute();
-$comments = $comments_stmt->fetchAll();
-?>
 
 <?php include 'navbar.php'; ?>
 
@@ -64,78 +13,43 @@ $comments = $comments_stmt->fetchAll();
 
 <body class="bg-white" style="font-family: Arial, sans-serif; font-weight: bold;">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <?php if ($article): ?>
-            <!-- Grid untuk Gambar dan Teks -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <!-- Gambar Pelengkap -->
-                <div class="md:col-span-1.3">
-                    <?php
-                    // Konversi data BLOB ke Base64 untuk ditampilkan sebagai gambar
-                    $gambar_base64 = base64_encode($article['gambar']);
-                    $gambar_src = 'data:image/jpeg;base64,' . $gambar_base64;
-                    ?>
-                    <img src="<?= $gambar_src ?>" alt="<?= htmlspecialchars($article['judul']) ?>" class="w-full h-auto rounded-lg">
-                </div>
-
-                <!-- Judul, Tanggal, Penulis, dan Kategori -->
-                <div class="md:col-span-2">
-                    <h1 class="text-3xl font-bold text-gray-900 mb-4 text-left"><?= htmlspecialchars($article['judul']) ?></h1>
-                    <p class="text-sm font-bold text-gray-500 mb-2 text-left">
-                        <?php
-                        // Jika ada updated_at, tampilkan waktu pembaruan, jika tidak, tampilkan waktu pembuatan
-                        $published_date = $article['updated_at'] ? $article['updated_at'] : $article['tanggal'];
-                        echo "Published on " . date('F j, Y \a\t H:i', strtotime($published_date));
-                        ?>
-                    </p>
-                    <p class="text-sm font-bold text-gray-500 mb-4 text-left">
-                        By <?= htmlspecialchars($article['penulis']) ?>
-                    </p>
-                    <div class="text-sm text-gray-700 text-left">
-                        <span class="font-medium">Categories:</span>
-                        <a href="#" class="text-black-600 text-left hover:text-black-800">
-                            <?= htmlspecialchars($article['kategori']) ?>
-                        </a>
-                    </div>
-                </div>
+        <!-- Grid untuk Gambar dan Teks -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <!-- Gambar Pelengkap -->
+            <div class="md:col-span-1.3">
+                <img src="img/2.jpg" alt="Mark Krespis Illustration" class="w-full h-auto rounded-lg">
             </div>
 
-            <!-- Isi Artikel -->
-            <div class="custom-prose text-gray-700">
-                <p><?= nl2br(htmlspecialchars($article['isi'])) ?></p>
+            <!-- Judul, Tanggal, Penulis, dan Kategori -->
+            <div class="md:col-span-2">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4 text-left">Illustrator Spotlight: Mark Krespis</h1>
+                <p class="text-sm font-boldt ext-gray-500 mb-2 text-left">Published on February 13, 2025 at 00:25</p>
+                <p class="text-sm font-bold text-gray-500 mb-4 text-left">By Admin</p>
+                <div class="text-sm text-gray-700 text-left">
+                    <span class="font-medium">Categories:</span>
+                    <a href="#" class="text-black-600 text-left hover:text-black-800">Art</a>
+                </div>
             </div>
-            <hr class="my-8 border-t border-gray-300"> <!-- Garis pemisah antar artikel -->
-        <?php else: ?>
-            <p>Artikel tidak ditemukan.</p>
-        <?php endif; ?>
+        </div>
+
+        <!-- Isi Artikel -->
+        <div class="custom-prose text-gray-700">
+            <p>A selection of work by Toronto-based illustrator Mark Krespis. Of mixed Filipino and Polish descent, Krespis is a recent graduate of Ontario College of Art & Design University. He has illustrated cover art for Toronto artists such as BADBADNOTGOOD and Charlotte Day Wilson.</p>
+            <p>After facing a house fire in 2022, Krespis has focused his work towards the tactility and precariousness of reality. Inspired by literature, music, art history, and the absurd, he draws upon themes of human nature relevant in both fine art and lowbrow illustration.</p>
+            <p>Mark Krespis participated in our 2024 Booooooom Illustration Awards and made our shortlist. Be the first to know about our next Awards by clicking here and pre-registering for the 2025 Booooooom Illustration Awards!</p>
+        </div>
     </div>
 </body>
 
-
-
-<!-- List of Comments -->
-<div id="commentsList" class="space-y-6">
-    <?php foreach ($comments as $comment): ?>
-        <div class="bg-gray-50 p-4 rounded-lg text-center">
-            <div class="flex flex-col items-center mb-2">
-                <span class="font-bold text-gray-900"><?= htmlspecialchars($comment['name']); ?></span>
-                <span class="text-sm text-gray-500">• <?= date('F j, Y \a\t g:i A', strtotime($comment['created_at'])); ?></span>
-            </div>
-            <p class="text-gray-700"><?= nl2br(htmlspecialchars($comment['comment'])); ?></p>
-        </div>
-    <?php endforeach; ?>
-</div>
-
-
-
 <!-- Section for User Comments -->
 <div class="mt-12">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Leave a Comment</h2>
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
 
     <!-- Form to Add a Comment -->
     <div class="mb-8">
-        <form action="post.php?id=<?= $article_id ?>" method="POST" id="commentForm">
+        <form id="commentForm">
             <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                 <input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required>
             </div>
             <div class="mb-4">
@@ -145,13 +59,32 @@ $comments = $comments_stmt->fetchAll();
             <button type="submit" class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">Submit Comment</button>
         </form>
     </div>
+
+    <!-- List of Comments -->
+    <div id="commentsList" class="space-y-6">
+        <!-- Example Comment (You can dynamically generate these with JavaScript) -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <div class="flex items-center mb-2">
+                <span class="font-bold text-gray-900">John Doe</span>
+                <span class="text-sm text-gray-500 ml-2">• February 14, 2025 at 10:30</span>
+            </div>
+            <p class="text-gray-700">This is an example comment. Mark Krespis's work is truly inspiring!</p>
+        </div>
+
+        <!-- Another Example Comment -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <div class="flex items-center mb-2">
+                <span class="font-bold text-gray-900">Jane Smith</span>
+                <span class="text-sm text-gray-500 ml-2">• February 15, 2025 at 08:15</span>
+            </div>
+            <p class="text-gray-700">I love how he blends fine art and lowbrow illustration. Great article!</p>
+        </div>
+    </div>
 </div>
-
-
 
 <footer>
     <div class="footer-content">
-        <p>&copy; 2025 DUAAARRR. All rights reserved.</p>
+        <p>&copy; 2025 BOOOOOOOM. All rights reserved.</p>
         <ul>
             <li><a href="#">About</a></li>
             <li><a href="#">Contact</a></li>

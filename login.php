@@ -2,58 +2,37 @@
 session_start();
 require 'database.php';
 
+$error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
+    $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Mengambil data user berdasarkan email dari tabel 'users'
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
-    $stmt->execute([$email]);
-    $user = $stmt->fetch(); // Ambil data user
+    $stmt = $pdo->prepare('SELECT * FROM authors WHERE username = ?');
+    $stmt->execute([$username]);
+    $author = $stmt->fetch();
 
-    // Cek jika user ada dan password cocok
-    if ($user && password_verify($password, $user['password'])) {
-        // Menyimpan informasi pengguna di session
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username']; // Username tetap digunakan setelah login
-
-        // Redirect ke halaman index.php setelah login berhasil
-        header('Location: index.php');
+    if ($author && password_verify($password, $author['password'])) {
+        $_SESSION['user_id'] = $author['id'];
+        $_SESSION['username'] = $author['username'];
+        header('Location: dashboard.php');
         exit();
     } else {
-        // Menyimpan error untuk ditampilkan di form login
-        $_SESSION['error'] = "Email atau password salah.";
+        $error = "Username atau password salah.";
     }
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="css/login.css">
-    <script>
-        // Menampilkan alert jika ada pesan error
-        window.onload = function() {
-            <?php if (isset($_SESSION['error'])) { ?>
-                alert("<?php echo $_SESSION['error']; ?>");
-                <?php unset($_SESSION['error']); // Hapus error setelah ditampilkan 
-                ?>
-            <?php } ?>
-        }
-    </script>
 </head>
-
 <body>
     <header>
-        <a href="index.php" style="text-decoration: none; color: inherit;">
-            <div class="logo">DUAAARRR</div>
-        </a>
+        <a href="index.php" class="logo">BOOOOOOOM</a>
         <nav>
             <a href="#">ART</a>
             <a href="#">PHOTO</a>
@@ -63,30 +42,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="login-container">
         <h2>Log In</h2>
-        <form method="POST" action="login.php">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required>
+        <?php if ($error): ?>
+            <p class="error-message"><?php echo $error; ?></p>
+        <?php endif; ?>
+        <form method="POST">
+            <label for="username">Username</label>
+            <input type="text" name="username" required>
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" name="password" required>
 
-            <div class="actions black">
-                <a href="register.php" class="forgot-password">Don't Have an Account?</a>
+            <div class="actions">
+                <a href="#" class="forgot-password">Forgot Password?</a>
                 <button type="submit">Log In</button>
             </div>
         </form>
     </div>
-
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2025 DUAAARRR. All rights reserved.</p>
-            <ul>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
-                <a href="#">Privacy Policy</a>
-            </ul>
-        </div>
-    </footer>
 </body>
-
 </html>

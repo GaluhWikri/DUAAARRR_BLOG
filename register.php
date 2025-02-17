@@ -2,54 +2,46 @@
 session_start();
 require 'database.php';
 
+$error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $fullname = $_POST['fullname'];
+    $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
 
-    // Validasi email
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = "Email tidak valid.";
+    if ($password !== $confirm_password) {
+        $error = "Password tidak cocok!";
     } else {
-        // Cek apakah email sudah terdaftar
-        $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
-        $stmt->execute([$email]);
-        $existingUser = $stmt->fetch();
-
-        if ($existingUser) {
-            $error = "Email sudah terdaftar. Silakan gunakan email lain.";
+        $stmt = $pdo->prepare('SELECT * FROM authors WHERE username = ? OR email = ?');
+        $stmt->execute([$username, $email]);
+        if ($stmt->fetch()) {
+            $error = "Username atau email sudah digunakan!";
         } else {
-            // Hash password
-            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
-            // Simpan data pengguna baru
-            $stmt = $pdo->prepare('INSERT INTO users (email, password, username, full_name) VALUES (?, ?, ?, ?)');
-            $stmt->execute([$email, $passwordHash, $_POST['username'], $_POST['full_name']]);
-
-            // Redirect ke halaman login setelah berhasil
-            header('Location: login.php');
-            exit();
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+            $stmt = $pdo->prepare('INSERT INTO authors (fullname, username, email, password) VALUES (?, ?, ?, ?)');
+            if ($stmt->execute([$fullname, $username, $email, $hashed_password])) {
+                header('Location: login.php');
+                exit();
+            } else {
+                $error = "Terjadi kesalahan saat mendaftar.";
+            }
         }
     }
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Page</title>
+    <title>Sign Up Page</title>
     <link rel="stylesheet" href="css/register.css">
 </head>
-
 <body>
     <header>
-        <a href="index.php" style="text-decoration: none; color: inherit;">
-            <div class="logo">DUAAARRR</div>
-        </a>
+        <a href="index.php" class="logo">BOOOOOOOM</a>
         <nav>
             <a href="#">ART</a>
             <a href="#">PHOTO</a>
@@ -58,39 +50,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </header>
 
     <div class="register-container">
-        <h2>Register</h2>
-        <form method="POST" action="register.php">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required>
+        <h2>Sign Up</h2>
+        <?php if ($error): ?>
+            <p class="error-message"><?php echo $error; ?></p>
+        <?php endif; ?>
+        <form method="POST">
+            <label for="fullname">Full Name</label>
+            <input type="text" name="fullname" required>
 
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" name="username" required>
 
-            <label for="full_name">Full Name</label>
-            <input type="text" id="full_name" name="full_name" required> <!-- Input untuk full name -->
+            <label for="email">Email Address</label>
+            <input type="email" name="email" required>
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" name="password" required>
 
-            <div class="terms">
-                <label for="agree">I agree to the Terms & Conditions</label>
-            </div>
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" name="confirm_password" required>
 
             <div class="actions">
-                <a href="login.php" class="login-link">Already have an account?</a>
-                <button type="submit">Register</button>
+                <button type="submit">Sign Up</button>
+            </div>
+            <div class="login-link">
+                Already have an account? <a href="login.php">Log In</a>
             </div>
         </form>
-
     </div>
-
-    <footer>
-        <a href="#">ABOUT</a>
-        <a href="#">PRIVACY POLICY</a>
-        <a href="#">TERMS & CONDITIONS</a>
-        <a href="#">CONTACT</a>
-        <a href="#">ADVERTISE!</a>
-    </footer>
 </body>
-
 </html>

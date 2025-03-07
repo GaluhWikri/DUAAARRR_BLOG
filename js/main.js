@@ -1,26 +1,30 @@
-// filter js
-$(document).ready(function() {
-    $('.filter-item').click(function (){
-      const value = $(this).attr('data-filter');
-      if (value == "all") {
-        $('.post-box').show('1000');
-    } else{
-        $('.post-box ')
-        .not('.' + value)
-        .hide('1000');
-        $('.post-box')
-          .filter('.' + value)
-          .show('1000');
-      }
-    });
-// add active to btn
-$(".filter-item").click(function () {
-    $(this).addClass("active-filter").siblings().removeClass("active-filter");
-  });
-});  
-// header background on scroll
-let header = document.querySelector('header');
 
-window.addEventListener('scroll',() => {
-header.classList.toggle("shadow",window.scrollY > 0);
-});  
+document.addEventListener("DOMContentLoaded", function () {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const articles = document.querySelectorAll(".article");
+
+    filterButtons.forEach(button => {
+        button.addEventListener("click", function (e) {
+            e.preventDefault();
+            const filter = this.getAttribute("data-filter");
+
+            articles.forEach(article => {
+                const category = article.getAttribute("data-category");
+
+                if (filter === "all" || category === filter) {
+                    article.classList.remove("opacity-0", "scale-90");
+                    article.classList.add("opacity-100", "scale-100");
+                    setTimeout(() => {
+                        article.style.display = "block";
+                    }, 300);
+                } else {
+                    article.classList.remove("opacity-100", "scale-100");
+                    article.classList.add("opacity-0", "scale-90");
+                    setTimeout(() => {
+                        article.style.display = "none";
+                    }, 300);
+                }
+            });
+        });
+    });
+});

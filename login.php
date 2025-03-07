@@ -2,43 +2,36 @@
 session_start();
 require 'database.php';
 
-// Token csrf
-if (!isset($_SESSION['csrf_token'])) {
+// DITAMBAHKAN: Generate CSRF token jika belum ada
+if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Validasi CSRF token
+    // DITAMBAHKAN: Validasi CSRF token
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die("Invalid CSRF token");
     }
-
-    // Hapus token setelah digunakan
-    unset($_SESSION['csrf_token']);
-
+    
     // Validasi input
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
     $password = trim($_POST['password']);
-
+    
     if (!$email || empty($password)) {
         $_SESSION['error'] = "Email atau password tidak boleh kosong.";
         header('Location: login.php');
         exit();
     }
-
-    // Menggunakan named parameter untuk SQL query
+    
+    // DIUBAH: Menggunakan named parameter untuk SQL query
     $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
-    $stmt->execute(['email' => $email]);
-    $user = $stmt->fetch();
+    $stmt->execute(['email' => $email]); // DIUBAH: Gunakan array asosiatif
+    $user = $stmt->fetch(); // Ambil data user
 
     // Cek jika user ada dan password cocok
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
-
-        // Regenerate CSRF token setelah login berhasil
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-
         header('Location: index.php');
         exit();
     } else {
@@ -48,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Validasi parameter GET 
+// DITAMBAHKAN: Validasi parameter GET jika ada
 if (!empty($_GET)) {
     foreach ($_GET as $key => $value) {
         $_GET[$key] = htmlspecialchars(strip_tags($value));
@@ -113,4 +106,4 @@ if (!empty($_GET)) {
         </div>
     </footer>
 </body>
-</html>
+</html>  

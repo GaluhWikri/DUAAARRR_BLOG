@@ -68,3 +68,4 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </footer>
 </body>
+

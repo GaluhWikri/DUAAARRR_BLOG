@@ -2,33 +2,52 @@
 session_start();
 require 'database.php';
 
-$error = '';
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $fullname = $_POST['fullname'];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+//token
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
-    if ($password !== $confirm_password) {
-        $error = "Password tidak cocok!";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Validasi CSRF Token
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Invalid CSRF token");
+    }
+
+    // Hapus token lama setelah digunakan
+    unset($_SESSION['csrf_token']);
+
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+    $username = trim($_POST['username']);
+    $full_name = trim($_POST['full_name']);
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Email tidak valid.";
+    } elseif (strlen($password) < 8) {
+        $error = "Password harus minimal 8 karakter.";
     } else {
-        $stmt = $pdo->prepare('SELECT * FROM authors WHERE username = ? OR email = ?');
-        $stmt->execute([$username, $email]);
-        if ($stmt->fetch()) {
-            $error = "Username atau email sudah digunakan!";
+        $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $existingUser = $stmt->fetch();
+
+        if ($existingUser) {
+            $error = "Email sudah terdaftar. Silakan gunakan email lain.";
         } else {
-            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-            $stmt = $pdo->prepare('INSERT INTO authors (fullname, username, email, password) VALUES (?, ?, ?, ?)');
-            if ($stmt->execute([$fullname, $username, $email, $hashed_password])) {
-                header('Location: login.php');
-                exit();
-            } else {
-                $error = "Terjadi kesalahan saat mendaftar.";
-            }
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare('INSERT INTO users (email, password, username, full_name) VALUES (:email, :password, :username, :full_name)');
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $passwordHash, PDO::PARAM_STR);
+            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+            $stmt->bindParam(':full_name', $full_name, PDO::PARAM_STR);
+            $stmt->execute();
+
+            header('Location: login.php');
+            exit();
         }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -36,12 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up Page</title>
+    <title>Register Page</title>
     <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
     <header>
-        <a href="index.php" class="logo">BOOOOOOOM</a>
+        <a href="index.php" style="text-decoration: none; color: inherit;">
+            <div class="logo">DUAAARRR</div>
+        </a>
         <nav>
             <a href="#">ART</a>
             <a href="#">PHOTO</a>
@@ -50,33 +71,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </header>
 
     <div class="register-container">
-        <h2>Sign Up</h2>
-        <?php if ($error): ?>
-            <p class="error-message"><?php echo $error; ?></p>
-        <?php endif; ?>
-        <form method="POST">
-            <label for="fullname">Full Name</label>
-            <input type="text" name="fullname" required>
+        <h2>Register</h2>
+        <form method="POST" action="register.php">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
 
             <label for="username">Username</label>
-            <input type="text" name="username" required>
+            <input type="text" id="username" name="username" required>
 
-            <label for="email">Email Address</label>
-            <input type="email" name="email" required>
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" required>
 
             <label for="password">Password</label>
-            <input type="password" name="password" required>
+            <input type="password" id="password" name="password" required>
 
-            <label for="confirm-password">Confirm Password</label>
-            <input type="password" name="confirm_password" required>
+            <div class="terms">
+                <label for="agree">I agree to the Terms & Conditions</label>
+            </div>
 
             <div class="actions">
-                <button type="submit">Sign Up</button>
-            </div>
-            <div class="login-link">
-                Already have an account? <a href="login.php">Log In</a>
+                <a href="login.php" class="login-link">Already have an account?</a>
+                <button type="submit">Register</button>
             </div>
         </form>
     </div>
+
+    <footer>
+        <a href="#">ABOUT</a>
+        <a href="#">PRIVACY POLICY</a>
+        <a href="#">TERMS & CONDITIONS</a>
+        <a href="#">CONTACT</a>
+        <a href="#">ADVERTISE!</a>
+    </footer>
 </body>
 </html>

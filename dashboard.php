@@ -1,6 +1,11 @@
 <?php
 session_start();
 require_once 'database.php';
+
+// token csrf
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,23 +33,26 @@ require_once 'database.php';
 
     <!-- Form untuk Menambahkan Artikel -->
     <form id="articleForm" action="admin/save_article.php" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
+        <!-- CSRF Token -->
+        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
         <!-- Judul Artikel -->
         <div class="mb-4">
             <label for="judul" class="block text-sm font-medium text-gray-700">Judul Artikel</label>
-            <input type="text" id="judul" name="judul" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required>
+            <input type="text" id="judul" name="judul" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required pattern=".{5,100}" title="Judul harus antara 5-100 karakter">
         </div>
 
         <!-- Gambar Artikel -->
         <div class="mb-4">
             <label for="gambar" class="block text-sm font-medium text-gray-700">URL Gambar</label>
-            <input type="file" id="gambar" name="gambar" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required>
+            <input type="file" id="gambar" name="gambar" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" accept="image/*" required>
             <p class="text-sm text-gray-500 mt-1">Ukuran maksimal gambar: 2MB.</p>
         </div>
 
         <!-- Penulis -->
         <div class="mb-4">
             <label for="penulis" class="block text-sm font-medium text-gray-700">Penulis</label>
-            <input type="text" id="penulis" name="penulis" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required>
+            <input type="text" id="penulis" name="penulis" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required pattern=".{3,50}" title="Nama penulis harus antara 3-50 karakter">
         </div>
 
         <!-- Kategori -->
@@ -61,13 +69,13 @@ require_once 'database.php';
         <!-- Isi Artikel -->
         <div class="mb-4">
             <label for="isi" class="block text-sm font-medium text-gray-700">Isi Artikel</label>
-            <textarea id="isi" name="isi" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required></textarea>
+            <textarea id="isi" name="isi" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" required minlength="50" title="Isi artikel minimal 50 karakter"></textarea>
         </div>
 
         <!-- Tombol Submit -->
         <button type="submit" class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">Tambah Artikel</button>
     </form>
+</div>
 
-    </body>
-
+</body>
 </html>

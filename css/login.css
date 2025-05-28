@@ -111,3 +111,8 @@ footer a {
     color: black;
     font-size: 12px;
 }
+
+.g-recaptcha {
+    margin: 15px 0;
+}
+

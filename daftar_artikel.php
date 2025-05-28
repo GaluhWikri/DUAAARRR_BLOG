@@ -4,7 +4,7 @@ session_start();
 
 require_once 'database.php';
 
-$admin_ids = [14, 10];
+$admin_ids = [14];
 $user_id = $_SESSION['user_id'];
 $query = "";
 if (in_array($user_id, $admin_ids)) {
@@ -29,7 +29,7 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="css/login.css">
     <header>
         <a href="index.php" style="text-decoration: none; color: inherit;">
-            <div class="logo">BOOOOOOOM</div>
+            <div class="logo">DUAAARRR</div>
         </a>
         <nav>
             <a href="dashboard.php">BACK</a>
